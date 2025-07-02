@@ -1,6 +1,8 @@
 // TODO: Implement `Index<&TicketId>` and `Index<TicketId>` for `TicketStore`.
 
 use ticket_fields::{TicketDescription, TicketTitle};
+use core::panic;
+use std::ops::Index;
 
 #[derive(Clone)]
 pub struct TicketStore {
@@ -55,6 +57,28 @@ impl TicketStore {
 
     pub fn get(&self, id: TicketId) -> Option<&Ticket> {
         self.tickets.iter().find(|&t| t.id == id)
+    }
+}
+
+impl Index<TicketId> for TicketStore {
+    type Output = Ticket;
+    fn index(&self, index: TicketId) -> &Ticket {
+        let ticket = self.get(index);
+        match ticket{
+            Some(t) => return t,
+            None => panic!()
+        }
+    }
+}
+
+impl Index<&TicketId> for TicketStore {
+    type Output = Ticket;
+    fn index(&self, index: &TicketId) -> &Ticket {
+        let ticket = self.get(*index);
+        match ticket{
+            Some(t) => return t,
+            None => panic!()
+        }
     }
 }
 

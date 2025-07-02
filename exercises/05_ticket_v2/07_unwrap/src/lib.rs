@@ -1,8 +1,23 @@
+use core::panic;
+
 // TODO: `easy_ticket` should panic when the title is invalid.
 //   When the description is invalid, instead, it should use a default description:
 //   "Description not provided".
 fn easy_ticket(title: String, description: String, status: Status) -> Ticket {
-    todo!()
+    if title.is_empty() {
+       panic!("Title cannot be empty");
+    }
+
+    let mut description = description;
+    if description.is_empty() || description.len() > 500  {
+        description = "Description not provided".to_string();
+    }
+
+    match Ticket::new(title, description, status) {
+        Ok(ticket) => return ticket,
+        Err(msg) => panic!("{}", msg),
+    }
+
 }
 
 #[derive(Debug, PartialEq, Clone)]
